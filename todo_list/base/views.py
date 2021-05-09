@@ -4,9 +4,9 @@ from .models import Task
 from django.contrib.auth import login
 from django.views.generic.list import ListView
 from django.contrib.auth.views import LoginView
-from django.views.generic.edit import FormView, CreateView
+from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.views.generic.detail import DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.views import View 
@@ -72,5 +72,18 @@ class TaskList(LoginRequiredMixin, ListView):
         return context
 
 
+class TaskUpdate(LoginRequiredMixin, UpdateView):
+    model = Task
+    fields = ['title', 'description', 'complete']
+    success_url = reverse_lazy('tasks')
 
+
+class DeleteView(LoginRequiredMixin, DeleteView):
+    model = Task
+    context_object_name = 'task'
+    success_url = reverse_lazy('tasks')
     
+class TaskDetail(LoginRequiredMixin, DetailView):
+    model = Task
+    context_object_name = 'task'
+    template_name = 'base/task.html'
